@@ -1,0 +1,4 @@
+﻿feature_set,BA_mean,BA_std,F1_macro
+phase_7,0.998818,0.001672,0.99147
+phase_plus_imbalance_8,0.998818,0.001672,0.99147
+compact_4,0.937803,0.031575,0.856605
