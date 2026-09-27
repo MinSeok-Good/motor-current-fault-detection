@@ -147,7 +147,14 @@ XGBoost `phase_7` 기준:
 - 9개 날짜 중 8개 날짜에서 BA = **1.0**
 - 2020-11-12: BA = **0.9891**
 
+정상과 축정렬불량이 함께 존재하는 날짜를 기준으로 확인했을 때,
+`R_rms`의 분리 경향이 날짜가 달라져도 유지되었습니다.
+
+![R RMS by Date](figures/r_rms_by_day.png)
+
 ## 10. 복잡한 모델이 정말 필요한가?
+
+동일한 Leave-One-Day-Out 조건에서 단순 모델과 복잡한 모델을 비교했습니다.
 
 | Model | OOF BA | OOF Macro F1 | Day BA mean | Day BA std |
 |---|---:|---:|---:|---:|
@@ -155,14 +162,15 @@ XGBoost `phase_7` 기준:
 | Logistic phase_7 | 0.9932 | 0.9657 | 0.9907 | 0.0137 |
 | XGBoost phase_7 | 0.9986 | 0.9928 | 0.9988 | 0.0034 |
 
-Decision Stump 규칙:
+![Model Performance Comparison](figures/model_performance_comparison.png)
+
+비교 결과, `R_rms` 하나만 사용하는 depth-1 Decision Tree가 OOF Balanced Accuracy와 Macro F1 모두 **1.0**을 기록했습니다.
+
+Decision Stump의 규칙은 다음과 같습니다.
 
 ```text
 R_rms <= 2.30  -> 정상
 R_rms >  2.30  -> 축정렬불량
-```
-
-현재 분석 범위에서는 복잡한 모델보다 **R상 RMS 하나를 이용한 단순 임계값 모델이 더 높은 성능과 설명 가능성**을 보였습니다.
 
 ## 11. 모델 해석: SHAP
 
