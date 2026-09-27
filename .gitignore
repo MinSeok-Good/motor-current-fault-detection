@@ -1,0 +1,23 @@
+# Data
+data/
+*.zip
+*.csv
+
+# Keep selected result CSVs
+!results/*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
