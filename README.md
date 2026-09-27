@@ -160,19 +160,29 @@ R_rms >  2.30  -> 축정렬불량
 
 현재 분석 범위에서는 복잡한 모델보다 **R상 RMS 하나를 이용한 단순 임계값 모델이 더 높은 성능과 설명 가능성**을 보였습니다.
 
-## 11. SHAP 분석
+## 11. 모델 해석: SHAP
 
-SHAP 패키지 의존성 문제를 피하기 위해 XGBoost의 `pred_contribs=True` 기능으로 TreeSHAP 값을 계산했습니다.
+XGBoost의 예측 기준을 확인하기 위해 TreeSHAP 기반 feature contribution을 분석했습니다.
 
-결과:
-1. `R_rms`가 압도적으로 높은 예측 기여도
-2. `S_rms`가 두 번째
-3. P2P 및 imbalance 계열은 상대적으로 낮은 기여도
-4. `R_rms ≈ 2.30` 부근에서 예측 기여 방향이 정상 → 축정렬불량으로 크게 바뀜
+### 11.1 SHAP Feature Importance
 
-이는 Decision Stump의 `R_rms = 2.30` 분리 기준과 일관된 결과였습니다.
+`R_rms`가 가장 높은 예측 기여도를 보였고, `S_rms`가 그 다음으로 나타났습니다.  
+반면 P2P 및 imbalance 계열 feature의 상대적 기여도는 낮았습니다.
 
-> SHAP은 모델의 예측 기여도를 설명하며, 해당 feature가 고장의 물리적 원인임을 의미하지 않습니다.
+![SHAP Feature Importance](figures/shap_feature_importance.png)
+
+### 11.2 R-phase RMS와 예측 방향
+
+`R_rms`가 약 `2.30` 이하일 때는 정상(class 0) 방향으로,  
+`2.30`을 초과하면 축정렬불량(class 1) 방향으로 예측 기여도가 크게 변했습니다.
+
+![R RMS SHAP Contribution](figures/r_rms_shap_contribution.png)
+
+이 결과는 depth-1 Decision Tree에서 확인한 다음 분리 기준과 일관됩니다.
+
+```text
+R_rms <= 2.30  → 정상
+R_rms >  2.30  → 축정렬불량
 
 ## 12. 최종 결론
 
