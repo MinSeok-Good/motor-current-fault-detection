@@ -122,9 +122,10 @@ XGBoost + 동일 Group CV 기준:
 
 `phase_7`: `R_rms, S_rms, T_rms, R_p2p, S_p2p, T_p2p, rms_imbalance_ratio`
 
-## 8. 모델 비교
+## 8. Baseline 모델 비교 (compact_4)
 
-동일한 날짜 그룹 분할 조건에서 비교했습니다.
+먼저 3상 대표값으로 압축한 `compact_4` feature set을 사용해
+동일한 날짜 그룹 분할 조건에서 모델 계열별 성능을 비교했습니다.
 
 | Model | BA mean | BA std | Macro F1 |
 |---|---:|---:|---:|
@@ -132,6 +133,9 @@ XGBoost + 동일 Group CV 기준:
 | LightGBM | 0.9125 | 0.0615 | 0.9286 |
 | Logistic Regression | 0.9004 | 0.0916 | 0.8178 |
 | Random Forest | 0.8106 | 0.1923 | 0.7838 |
+
+이후 phase별 정보를 유지한 `phase_7` feature set에서 XGBoost Balanced Accuracy가
+0.9988까지 향상되어, 상별 정보 손실이 성능에 영향을 주는 것을 확인했습니다.
 
 ## 9. Leave-One-Day-Out 검증
 
@@ -183,6 +187,7 @@ XGBoost의 예측 기준을 확인하기 위해 TreeSHAP 기반 feature contribu
 ```text
 R_rms <= 2.30  → 정상
 R_rms >  2.30  → 축정렬불량
+```
 
 ## 12. 최종 결론
 
