@@ -226,6 +226,8 @@ motor-current-fault-detection/
 │  ├─ model_comparison.csv
 │  └─ feature_set_comparison.csv
 └─ figures/
+   ├─ shap_feature_importance.png
+   ├─ r_rms_shap_contribution.png
    └─ README.md
 ```
 
