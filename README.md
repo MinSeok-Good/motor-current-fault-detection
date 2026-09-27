@@ -17,7 +17,7 @@ AI Hub의 **기계시설물 고장 예지 센서 데이터**를 활용해, 3상 
 
 ## 2. 데이터
 
-- 출처: AI Hub `기계시설물 고장 예지 센서`
+- 출처: [AI Hub - 기계시설물 고장 예지 센서](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=238)
 - 분석 모달리티: **Current**
 - Sample Rate: **2,000 Hz**
 - Data Length: **2,000**
@@ -33,6 +33,33 @@ AI Hub의 **기계시설물 고장 예지 센서 데이터**를 활용해, 3상 
 
 초기 구축 샘플은 각 상태 500개 기준 총 3,000개였으며, 품질 검사 후 7개의 극단적인 저신호 샘플을 제외해 **2,993개**를 유지했습니다.
 
+### 데이터 획득 및 대용량 처리
+
+전체 데이터를 한 번에 내려받거나 메모리에 적재하지 않고, AI Hub CLI(`aihubshell`)를 이용해 필요한 파일만 선별했습니다.
+
+1. AI Hub CLI로 `datasetkey=238`의 데이터셋 및 파일 목록 확인
+2. 전체 파일 중 분석에 필요한 **Validation / Current** 압축 파일만 선택 다운로드
+3. WSL 환경에서 압축 내부 CSV 구조와 설비/상태별 경로 확인
+4. 분석 대상 설비와 고장 유형별로 각 500개씩 총 3,000개 CSV를 subset으로 구성
+5. 각 CSV를 파일 단위로 읽어 time-domain feature를 추출
+6. 파일 단위 특징을 하나의 AI-ready feature table로 통합
+
+CLI 사용 예시는 다음과 같습니다.
+
+```bash
+# 데이터셋/파일 목록 확인
+./aihubshell -mode l -datasetkey 238
+
+# 필요한 파일만 선택 다운로드
+./aihubshell \
+  -mode d \
+  -datasetkey 238 \
+  -filekey <FILE_KEY> \
+  -aihubapikey "$AIHUB_KEY"
+```
+
+> API Key는 저장소에 포함하지 않으며, 환경변수 형태로만 사용했습니다.
+>
 > 원본 데이터는 용량과 배포 조건 때문에 저장소에 포함하지 않습니다.
 
 ## 3. Raw CSV 구조
@@ -235,6 +262,8 @@ motor-current-fault-detection/
 │  ├─ model_comparison.csv
 │  └─ feature_set_comparison.csv
 └─ figures/
+   ├─ r_rms_by_day.png
+   ├─ model_performance_comparison.png
    ├─ shap_feature_importance.png
    ├─ r_rms_shap_contribution.png
    └─ README.md
@@ -255,6 +284,6 @@ Python, pandas, NumPy, SciPy, scikit-learn, XGBoost, LightGBM, Matplotlib
 
 ## 17. 데이터 출처
 
-AI Hub **기계시설물 고장 예지 센서**
-
-원본 데이터는 저장소에 포함하지 않습니다.
+- [AI Hub - 기계시설물 고장 예지 센서](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=238)
+- 본 프로젝트에서는 AI Hub에서 제공하는 **전류(Current)** 데이터를 활용했습니다.
+- 원본 데이터는 용량 및 배포 조건을 고려해 GitHub 저장소에는 포함하지 않았습니다.
