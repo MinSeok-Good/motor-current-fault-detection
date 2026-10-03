@@ -1,0 +1,11 @@
+{
+  "source": "user-shared console output, 2026-10-03",
+  "target_files": 3000,
+  "read_files": 3000,
+  "errors": 0,
+  "feature_mismatches": 0,
+  "filter_mismatches": 0,
+  "clean_values_unchanged": true,
+  "expected_removed": 7,
+  "actual_removed": 7
+}

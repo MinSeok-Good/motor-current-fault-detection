@@ -5,3 +5,5 @@ matplotlib
 scikit-learn
 xgboost
 lightgbm
+statsmodels
+ipykernel

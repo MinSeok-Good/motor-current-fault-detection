@@ -293,7 +293,14 @@ motor-current-fault-detection/
 ├─ README.md
 ├─ requirements.txt
 ├─ .gitignore
+├─ notebooks/
+│  ├─ 02_verify_from_clean_csv.ipynb
+│  └─ 03_verify_statistics_and_environment.ipynb
+├─ docs/
+│  └─ REPRODUCTION.md
 ├─ src/
+│  ├─ reproduce.py
+│  ├─ verify_raw_zip.py
 │  ├─ preprocessing.py
 │  ├─ modeling.py
 │  └─ shap_analysis.py
@@ -310,12 +317,21 @@ motor-current-fault-detection/
 
 ## 15. 실행 순서
 
+검증한 분석을 실행하는 경로는 [재현성 실행 안내](docs/REPRODUCTION.md)에 정리했습니다. 두 특징 CSV를 `data/processed/`에 두거나 `--data-dir`로 실제 폴더를 지정합니다. 원본 데이터와 특징 CSV는 저장소에 포함하지 않습니다.
+
 ```bash
 pip install -r requirements.txt
-python src/preprocessing.py --data_dir "YOUR_DATA_DIR" --output "ai_ready_features.csv"
-python src/modeling.py --features_csv "ai_ready_features.csv"
-python src/shap_analysis.py --features_csv "ai_ready_features.csv"
+
+# 검증한 노트북과 같은 코드로 모델·회귀 분석 실행
+python src/reproduce.py --data-dir "YOUR_FEATURE_CSV_FOLDER"
+
+# ZIP 전체를 풀지 않고 기존 3,000개 원본의 특징·제거 기준 대조
+python src/verify_raw_zip.py --zip "YOUR_CURRENT_ZIP" --data-dir "YOUR_FEATURE_CSV_FOLDER"
 ```
+
+노트북에서 실행할 때는 `MOTOR_FEATURE_DIR` 환경변수에 CSV 폴더를 지정하거나 각 노트북 첫 셀의 `DATA` 경로를 수정합니다. 결과는 `results/reproduction/`에 저장됩니다. 업로드된 실행 출력과 결과 CSV는 검증 당시 기록이며, 다시 실행하면 현재 환경의 결과로 갱신됩니다.
+
+기존 `preprocessing.py`는 압축 해제된 원본 폴더에서 추가 품질 열을 포함한 특징을 생성하는 별도 경로입니다. `modeling.py`는 날짜별 LODO 비교, `shap_analysis.py`는 다시 학습한 모델의 그림 생성을 수행합니다. README의 전체 비교와 회귀 재현에는 위 `reproduce.py` 또는 노트북을 사용합니다. 기존 원본 폴더 CLI 전체 실행은 별도 통합 검증이 필요합니다.
 
 ## 16. Tech Stack
 

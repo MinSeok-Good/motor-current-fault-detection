@@ -1,0 +1,10 @@
+{
+  "python": "3.11.17 | packaged by Anaconda, Inc. | (main, Oct  1 2026, 20:16:54) [MSC v.1942 64 bit (AMD64)]",
+  "numpy": "2.4.6",
+  "pandas": "3.0.6",
+  "scipy": "1.17.1",
+  "scikit-learn": "1.9.1",
+  "statsmodels": "0.15.0",
+  "xgboost": "3.2.0",
+  "lightgbm": "4.7.0"
+}

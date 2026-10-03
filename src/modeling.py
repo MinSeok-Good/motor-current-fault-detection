@@ -16,8 +16,10 @@ def prepare_dsf(df):
     df = df.copy()
     if "low_signal_candidate" in df.columns:
         df = df[~df["low_signal_candidate"].astype(bool)].copy()
-    df["date"] = pd.to_datetime(df["date"])
-    df["day"] = df["date"].dt.date
+    tokens = df["path"].str.extract(r"_(\d{8})_\d{6}_", expand=False)
+    df["day"] = pd.to_datetime(tokens, format="%Y%m%d", errors="raise").dt.date
+    if df["day"].isna().any():
+        raise ValueError("Cannot extract collection date from path")
     dsf = df[df["equipment"] == "L-DSF-01"].copy()
     overlap_days = []
     for day, g in dsf.groupby("day"):
@@ -61,3 +63,4 @@ def main():
     print("\n", export_text(stump, feature_names=["R_rms"]))
 
 if __name__ == "__main__": main()
+
